@@ -39,10 +39,10 @@
 
         node.append('circle')
             .attr('r',(d) => getSize(d))
-            .attr("x", (d) => getXOffset(d))
-            .attr("y", (d) => getYOffset(d))
+            .attr("x", (d) => getOffset(d))
+            .attr("y", (d) => getOffset(d))
             .attr('fill',(d) => getColorFill(d))
-            .attr('stroke','black')
+            .attr('stroke',(d) => getStrokeFill(d))
 
         function getColorFill(d) {
             switch (d.class) {
@@ -50,29 +50,35 @@
                     return 'red';
                 case "GENRE":
                     return 'green';
+                case "COUNTRY":
+                    return 'PeachPuff';
+                case "ARTIST_TYPE":
+                    return 'Cornsilk';
+                case "ARTIST":
+                    return 'transparent';
                 default:
                     return 'blue';
             }
         }
 
-        function getXOffset(d) {
-            if (d.class == "USER") {
-                return -75;
-            } else if (d.type != "root") {
-                return -d.occurences;
+        function getStrokeFill(d) {
+            switch (d.class) {
+                case "ARTIST":
+                    return 'transparent';
+                default:
+                    return 'black';
             }
-            return -30;
         }
 
-        function getYOffset(d) {
+        function getOffset(d) {
             if (d.class == "USER") {
                 return -75;
             } else if (d.type != "root") {
 
                 var rootSize = d.occurences;
 
-                if (rootSize < 30.0) {
-                    rootSize = 30.0;
+                if (rootSize < 75.0) {
+                    rootSize = 75.0;
                 }
 
                 if (rootSize > 200.0) {
@@ -87,11 +93,11 @@
         function getSize(d) {
             if (d.class == "USER") {
                 return 75;
-            } else if (d.type != "root") {
+            } else if (d.class != "ARTIST") {
                 var rootSize = d.occurences;
 
-                if (rootSize < 30.0) {
-                    rootSize = 30.0;
+                if (rootSize < 75.0) {
+                    rootSize = 75.0;
                 }
 
                 if (rootSize > 200.0) {
@@ -189,7 +195,7 @@
         <p class="topList">
         <ol>
           <% @genres.each do |genre| %>
-              <li><%= genre[0] + " " + genre[1].to_s%></li><br>
+              <li><%= genre[0]%></li><br>
           <% end %>
         </ol>
         </p>
@@ -201,7 +207,7 @@
         <p class="topList">
         <ol>
           <% @artist_type.each do |at| %>
-              <li>Artist type <%= at[0] + " " + at[1].to_s%></li><br>
+              <li><%= at[0]%></li><br>
           <% end %>
         </ol>
         </p>
@@ -213,7 +219,7 @@
         <p class="topList">
         <ol>
           <%@countries.each do |country|%>
-              <li>Origin <%= country[0] + " " + country[1].to_s%></li><br>
+              <li><%=country[0]%></li><br>
           <% end %>
         </ol>
         </p>

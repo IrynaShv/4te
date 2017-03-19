@@ -25,7 +25,7 @@ class UsersController < ApplicationController
         artist_type[artist[:type_of_artist]] = artist_type[artist[:type_of_artist]] + 1
       end
       country = artist['origin'].gsub('[]', '')
-      unless country == 'unknown'
+      unless country == 'unknown' || country == '' || country == 'US' || country == 'USA'
         if countries.has_key? country
           countries[country] = countries[country] + 1
         else
@@ -64,15 +64,17 @@ class UsersController < ApplicationController
 
     count = 0
 
-    nodes.push({
-        'id' => count,
-        'type' => "USER",
-        'name' => @user.name,
-        'image' => @user.image_url
-               })
-    count = count + 1
+    # nodes.push({
+    #     'id' => count,
+    #     'type' => "USER",
+    #     'name' => @user.name,
+    #     'image' => @user.image_url
+    #            })
+    # count = count + 1
 
     genresID = {};
+    artistTypeID = {};
+    countryTypeID = {};
 
     @genres.each do |genre|
       nodes.push({
@@ -83,11 +85,37 @@ class UsersController < ApplicationController
           'occurences' => genre[1]
                      })
       genresID[genre[0]] = count
-      puts genresID[genre[0]]
-      links.push({
-          'source' => 0,
-          'target' => count
+      # links.push({
+      #     'source' => 0,
+      #     'target' => count
+      #            })
+
+      count = count + 1
+    end
+
+    @artist_type.each do |artistType|
+      nodes.push({
+          'id' => count,
+          'class' => "ARTIST_TYPE",
+          'type' => artistType[0],
+          'name' => artistType[0],
+          'occurences' => artistType[1]
                  })
+      artistTypeID[artistType[0]] = count
+
+      count = count + 1
+    end
+
+    @countries.each do |country|
+      nodes.push({
+          'id' => count,
+          'class' => "COUNTRY",
+          'type' => country[0],
+          'name' => country[0],
+          'occurences' => country[1]
+                 })
+
+      countryTypeID[country[0]] = count
 
       count = count + 1
     end
@@ -96,16 +124,33 @@ class UsersController < ApplicationController
       nodes.push({
           'id' => count,
           'class' => "ARTIST",
-          'name' => artist.name
-                 });
+          'name' => artist.name})
 
-      artist.genres.each do |genre|
-        links.push({
-                       'source' => genresID[genre],
-                       'target' => count
-                   })
+      unless artist.genres == nil
+        artist.genres.each do |genre|
+          links.push({
+                         'source' => genresID[genre],
+                         'target' => count
+                     })
+        end
       end
 
+      artist_type_of = artist.type_of_artist
+
+      unless artist_type_of == 'unknown'
+        links.push({
+              'source' => artistTypeID[artist.type_of_artist],
+              'target' => count
+                     })
+      end
+
+      country = artist['origin'].gsub('[]', '')
+      unless country == 'unknown' || country == '' || country == 'US' || country == 'USA' || country == 'U.S.'
+        links.push({
+            'source' => countryTypeID[country],
+            'target' => count
+                   })
+      end
       count = count + 1
     end
 
