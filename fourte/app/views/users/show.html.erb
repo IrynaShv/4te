@@ -194,8 +194,8 @@
         <h1 class="center-align">Top Music Genres</h1>
         <p class="topList">
         <ol>
-          <% @genres.each do |genre| %>
-              <li><%= genre[0]%></li><br>
+          <% for i in 1..10 %>
+              <li><%= @genres.keys[i]%></li><br>
           <% end %>
         </ol>
         </p>
@@ -218,8 +218,8 @@
         <h1 class="center-align">Top Artist Origins</h1>
         <p class="topList">
         <ol>
-          <%@countries.each do |country|%>
-              <li><%=country[0]%></li><br>
+          <% for i in 1..10 %>
+              <li><%= @countries.keys[i]%></li><br>
           <% end %>
         </ol>
         </p>
