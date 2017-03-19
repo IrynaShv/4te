@@ -195,7 +195,7 @@
         <p class="topList">
         <ol>
           <% for i in 1..10 %>
-              <li><%= @genres.keys[i]%></li><br>
+              <li><%= @genres.keys[i] + " - " + @genres[@genres.keys[i]].to_s%></li><br>
           <% end %>
         </ol>
         </p>
@@ -207,7 +207,7 @@
         <p class="topList">
         <ol>
           <% @artist_type.each do |at| %>
-              <li><%= at[0]%></li><br>
+              <li><%= at[0] + " - " + at[1].to_s%></li><br>
           <% end %>
         </ol>
         </p>
@@ -219,7 +219,7 @@
         <p class="topList">
         <ol>
           <% for i in 1..10 %>
-              <li><%= @countries.keys[i]%></li><br>
+              <li><%= @countries.keys[i]+ " - " + @countries[@countries.keys[i]].to_s%> </li><br>
           <% end %>
         </ol>
         </p>
