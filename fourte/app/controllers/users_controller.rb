@@ -164,13 +164,59 @@ class UsersController < ApplicationController
       count = count + 1
       end
 
-
       nodeJSON[:'nodes'] = nodes
       nodeJSON[:'links'] = links
 
-      @fileJSON = JSON.generate(nodeJSON)
+    @fileJSON = JSON.generate(nodeJSON)
     end
 
+    genrePieChartJSON = {}
+    tempGenrePieChart = []
+
+    artistTypePieChartJSON = {}
+    tempartistTypePieChart = []
+
+    countryTypePieChartJSON = {}
+    tempCountryPieChart = []
+
+    for i in 0..2
+      legend = @artist_type.keys[i]
+      value = @artist_type[@artist_type.keys[i]]
+
+      unless legend == nil || value == nil
+      tempartistTypePieChart.push({
+          'legend':@artist_type.keys[i],
+          'value':@artist_type[@artist_type.keys[i]]
+                                  })
+        end
+    end
+
+    for i in 0..9
+      tempGenrePieChart.push({
+          'legend':@genres.keys[i],
+          'value':@genres[@genres.keys[i]]
+                             })
+    end
+
+    for i in 0..9
+      legend = @countries.keys[i]
+      value = @countries[@countries.keys[i]]
+
+      unless legend == nil || value == nil
+        tempCountryPieChart.push({
+                                        'legend':legend,
+                                        'value':value
+                                    })
+      end
+    end
+    genrePieChartJSON[:'data'] = tempGenrePieChart
+    @genrePieChart = JSON.generate(genrePieChartJSON)
+
+    artistTypePieChartJSON[:'data'] = tempartistTypePieChart
+    @artistTypePieChart = JSON.generate(artistTypePieChartJSON)
+
+    countryTypePieChartJSON[:'data'] = tempCountryPieChart
+    @countryPieChart = JSON.generate(countryTypePieChartJSON)
   end
 
 end
