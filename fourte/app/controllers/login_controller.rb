@@ -19,7 +19,6 @@ class LoginController < ApplicationController
 
     res = HTTParty.get("https://api.spotify.com/v1/me/tracks", :headers => { "Authorization" => "Bearer " + access_token})
     hash = JSON.parse res.body
-    puts hash
     hash["items"].each do |item|
       items << item
     end
@@ -32,7 +31,14 @@ class LoginController < ApplicationController
       end
     end
 
-    items.each do |item|
+    create_artists(items, user)
+  end
+
+  def create_artists(items, user)
+
+    types = ['solo male', 'solo female', 'band']
+
+  items.each do |item|
       item["track"]["artists"].each do |artist|
         name = artist["name"]
         puts name
@@ -41,16 +47,31 @@ class LoginController < ApplicationController
         artist = Artist.where(:spotify_artist_id => spotify_id).first
         puts artist
         if artist == nil
-          res = HTTParty.get("https://api.spotify.com/v1/artists/#{spotify_id}")
-          artist_info = JSON.parse res.body
-          genres = filter_genres(artist_info["genres"])
+          genre_data = HTTParty.get("https://api.spotify.com/v1/artists/#{spotify_id}")
+          artist_info = JSON.parse genre_data.body
+          if name.force_encoding("UTF-8").ascii_only?
+            other_data = HTTParty.get("http://ec2-54-237-206-73.compute-1.amazonaws.com/?name=#{name}")
+            genres = filter_genres(artist_info["genres"])
+            begin
+                data = JSON.parse other_data
+                puts data
+                other_data_hash = filter_other_data(data)
+
+            rescue JSON::ParserError => e
+              puts "Error #{e}"
+              other_data_hash = {:type => 'unknown', :origin => 'unknown'}
+            end
+          else
+            other_data_hash = {:type => 'unknown', :origin => 'unknown'}
+          end
+          puts other_data_hash
           puts genres
-          Artist.create(:name => name, :spotify_artist_id => spotify_id, :genres => genres, :user_id => user.id)
+          Artist.create(:name => name, :spotify_artist_id => spotify_id, :genres => genres, :user_id => user.id,
+                        :origin => other_data_hash[:origin], :type_of_artist => other_data_hash[:type])
         end
       end
-    end;nil
+    end
   end
-
 
   def get_user(id)
     user = User.all.where(:name => id).first
@@ -61,6 +82,37 @@ class LoginController < ApplicationController
     user
   end
 
+  def filter_other_data(data)
+      if data.has_key?('type')
+        type = data['type']
+        if type == 'solo'
+          if data.has_key?('gender')
+            gender = data['gender']
+            if gender == 'female'
+              type = 'solo female'
+            elsif gender == 'male'
+              type = 'solo male'
+            else
+              type = 'unknown'
+            end
+          end
+        elsif type == 'band'
+          type = 'band'
+        else
+          type = 'unknown'
+        end
+
+      else
+        type = 'unknown'
+    end
+
+    if data.has_key?('origin')
+      origin = data['origin']
+    else
+      origin = 'unknown'
+    end
+    return {:type => type, :origin => origin}
+  end
 
   def filter_genres(spotify_genres)
     genres = ['hip hop', 'metal', 'pop', 'rap', 'jazz', 'indie', 'classical', 'alternative', 'screamo', 'rock', 'edm', 'techno',
