@@ -6,6 +6,7 @@ class LoginController < ApplicationController
 
   def prepare
     @token = params[:access_token]
+    redirect_to 'http://4te.space/loading'
   end
 
   def loading
@@ -51,7 +52,7 @@ class LoginController < ApplicationController
           genre_data = HTTParty.get("https://api.spotify.com/v1/artists/#{spotify_id}")
           artist_info = JSON.parse genre_data.body
           if name.force_encoding("UTF-8").ascii_only?
-            other_data = HTTParty.get("http://ec2-54-237-206-73.compute-1.amazonaws.com/?name=#{name}")
+            other_data = HTTParty.get("http://localhost:5000?name=#{name}")
             genres = filter_genres(artist_info["genres"])
             begin
                 data = JSON.parse other_data
