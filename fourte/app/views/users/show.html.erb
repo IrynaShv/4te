@@ -168,7 +168,7 @@
         <p class="topList">
         <ol>
           <% @genres.each do |genre| %>
-              <li><%= genre[0]%></li><br>
+              <li><%= genre[0] + " " + genre[1].to_s%></li><br>
           <% end %>
         </ol>
         </p>
@@ -179,8 +179,8 @@
         <h1 class="center-align">Top Artist Types</h1>
         <p class="topList">
         <ol>
-          <% for i in 1..10 do %>
-              <li>Artist type <%= i %></li><br>
+          <% @artist_type.each do |at| %>
+              <li>Artist type <%= at[0] + " " + at[1].to_s%></li><br>
           <% end %>
         </ol>
         </p>
@@ -191,8 +191,8 @@
         <h1 class="center-align">Top Artist Origins</h1>
         <p class="topList">
         <ol>
-          <% for i in 1..10 do %>
-              <li>Origin <%= i %></li><br>
+          <%@countries.each do |country|%>
+              <li>Origin <%= country[0] + " " + country[1].to_s%></li><br>
           <% end %>
         </ol>
         </p>

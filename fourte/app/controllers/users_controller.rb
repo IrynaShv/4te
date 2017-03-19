@@ -8,21 +8,51 @@ class UsersController < ApplicationController
 
 
   def count_genres
-    genres =  {'hip hop' => 0, 'metal' => 0, 'pop' => 0, 'rap' => 0, 'jazz' => 0, 'indie' => 0, 'classical' => 0, 'alternative' => 0, 'screamo' => 0, 'rock' => 0, 'edm' => 0, 'techno' => 0,
-                         'country' => 0, 'house' => 0, 'r&b' => 0, 'dubstep' => 0}
+    genres =  {'hip hop' => 0, 'metal' => 0, 'pop' => 0, 'rap' => 0, 'jazz' => 0, 'indie' => 0, 'classical' => 0,
+               'alternative' => 0, 'screamo' => 0, 'rock' => 0, 'edm' => 0, 'techno' => 0,
+               'country' => 0, 'house' => 0, 'r&b' => 0, 'dubstep' => 0}
+
+    countries = {}
+    artist_type = {'solo male' => 0, 'solo female' => 0, 'band' => 0}
     @user.artists.each do |artist|
-      artist.genres.each do |genre|
-        genres[genre] = genres[genre] + 1
+      if artist.genres != nil
+        artist.genres.each do |genre|
+          genres[genre] = genres[genre] + 1
+        end
+      end
+
+      unless artist[:type_of_artist] == 'unknown'
+        artist_type[artist[:type_of_artist]] = artist_type[artist[:type_of_artist]] + 1
+      end
+      country = artist['origin'].gsub('[]', '')
+      unless country == 'unknown'
+        if countries.has_key? country
+          countries[country] = countries[country] + 1
+        else
+          countries[country] = 1
+        end
       end
     end
 
     @genres = {}
+    @countries = {}
+    @artist_type = {}
 
-   # genres.keys.sort.each { |value| @genres[key] = genres[key] }
     genres.keys.sort_by { |key| genres[key] }.reverse.each do
     |key|
       puts genres[key]
       @genres[key] = genres[key]
+    end
+    countries.keys.sort_by { |key| countries[key] }.reverse.each do
+    |key|
+      puts countries[key]
+      @countries[key] = countries[key]
+    end
+
+    artist_type.keys.sort_by { |key| artist_type[key] }.reverse.each do
+    |key|
+      puts artist_type[key]
+     @artist_type[key] = artist_type[key]
     end
   end
 
