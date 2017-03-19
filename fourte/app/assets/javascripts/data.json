@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "name":"Betty White",
+      "class":"USER",
+      "type":"USER",
+      "id":0
+    },
+    {
+      "name":"Genre",
+      "type":"root",
+      "class":"GENRE",
+      "id":1
+    }
+  ],
+  "links": [
+    {
+      "source":0,
+      "target":1
+    }
+  ]
+}

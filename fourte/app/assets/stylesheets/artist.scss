@@ -1,3 +1,89 @@
 // Place all the styles related to the Artist controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script:400,700');
+
+
+$moss_green: #8E896C;
+$dancing_script_font: 'Dancing Script',curvsive;
+
+.link {
+  stroke: #ccc;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+html {
+  background-color: $moss_green !important;
+}
+
+html {
+  background-image: url('/assets/music-equalizer-background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+image {
+  border-radius: 50%;
+}
+
+.container {
+  //opacity: 0.80;
+  background: #D8D8D8;
+  border: 1px solid #979797;
+  box-shadow: 0 18px 4px 0 rgba(0,0,0,0.50);
+  border-top-left-radius: 45px;
+  border-top-right-radius: 45px;
+}
+
+.mapText {
+  font-family: Noteworthy-Light !important;
+  font-size: 12px !important;
+  color: #000000 !important;
+}
+
+.cardTopList h1 {
+  /* My Music Preferences: */
+  font-family: Noteworthy-Bold;
+  font-size: 36px;
+  color: #000000;
+}
+
+.cardVerticalList h1 {
+  /* Most Popular Artist: */
+  font-family: Noteworthy-Light;
+  font-size: 17px;
+  color: #000000;
+}
+
+nav {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+  margin-left: 30px;
+}
+
+.logo-style {
+  font-family: 'Dancing Script', cursive;
+  color: #FFFFFF;
+  font-weight: normal;
+}
+
+.logo-header {
+  font-size: 32px;
+  padding-left: 20px;
+  padding-top: 30px;
+}
+
+nav {
+  background-color: transparent;
+  margin-top: 30px;
+}

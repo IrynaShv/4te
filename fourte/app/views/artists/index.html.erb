@@ -1,6 +1,207 @@
-<% @artists.each do  |artist| %>
-<h2><%=h artist.name %></h2>
-<% artist.genres.each do |genre| %>
-<p><%= genre %></p>
-<% end %>
-<% end %>
+<script>
+    $(document).ready(function() {
+        var width = document.getElementById('mainContainer').offsetWidth;
+        console.log(document.getElementById('mainContainer'));
+        var height = 500;
+
+        var svg = d3.select("div.graphMap").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var force = d3.layout.force()
+            .gravity(0.05)
+            .distance(100)
+            .charge(-100)
+            .size([width, height]);
+
+        d3.json("/assets/data.json", function (error, json) {
+            if (error) throw error;
+
+            force
+                .nodes(json.nodes)
+                .links(json.links)
+                .start();
+
+            var link = svg.selectAll(".link")
+                .data(json.links)
+                .enter().append("line")
+                .attr("class", "link");
+
+            var node = svg.selectAll(".node")
+                .data(json.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(force.drag);
+
+
+            //.attr("xlink:href", function(d) {
+            node.append("image")
+                .attr("x", (d) => getXOffset(d))
+                .attr("y", (d) => getYOffset(d))
+                .attr("width", (d) => getWidth(d))
+                .attr("height", (d) => getHeight(d))
+            //need to loop through nodes to find number of links for a node
+                .attr("xlink:href", (d) => {
+                    if (d.type == "USER") {
+                        return "/assets/bettyhead.jpg";
+                    } else if (d.class == "GENRE") {
+                        return color(4);
+                    }
+                }
+            );
+
+            function getXOffset(d) {
+                if (d.class == "USER") {
+                    return -75;
+                } else if (d.type != "root") {
+                    return d.occurences;
+                }
+                return -30;
+            }
+
+            function getYOffset(d) {
+                if (d.class == "USER") {
+                    return -75;
+                } else if (d.type != "root") {
+                    return d.occurences;
+                }
+                return -30;
+            }
+
+            function getWidth(d) {
+                if (d.class == "USER") {
+                    return 75;
+                } else if (d.type != "root") {
+                    return d.occurences;
+                }
+                return 30;
+            }
+
+            function getHeight(d) {
+                if (d.class == "USER") {
+                    return 75;
+                } else if (d.type != "root") {
+                    return d.occurences;
+                }
+                return 30;
+            }
+
+            node.append("text")
+                .attr("class","mapText")
+                .attr("dx", 12)
+                .attr("dy", ".35em")
+                .text(function (d) {
+                    return d.name
+                });
+
+            force.on("tick", function () {
+                link.attr("x1", function (d) {
+                    return d.source.x;
+                })
+                    .attr("y1", function (d) {
+                        return d.source.y;
+                    })
+                    .attr("x2", function (d) {
+                        return d.target.x;
+                    })
+                    .attr("y2", function (d) {
+                        return d.target.y;
+                    });
+
+                node.attr("transform", function (d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+
+
+            });
+        });
+
+        function color(i) {
+            switch (i) {
+                case 0:
+                    return "http://www.iconsdb.com/icons/download/purple/circle-512.png";
+                case 1:
+                    return "//www.cogenhr.com/development/wp-content/uploads/2015/03/Red-circle-			transparent-1024x1006.png";
+                case 2:
+                    return "//www.clker.com/cliparts/B/U/N/P/u/7/light-orange-circle-md.png";
+                case 3:
+                    return "//www.clker.com/cliparts/w/s/M/d/S/T/light-pink-circle-hi.png";
+                case 4:
+                    return "http://img.sotmarket.ru/standart/img/podarki/priyatnye-melochi/prikolnye-tablichki/tablichka-apli-zelenyj-krug-11910-0.png";
+                case 5:
+                    return "https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/Yellow_icon.svg/1024px-Yellow_icon.svg.png";
+                case 6:
+                    return "http://www.clker.com/cliparts/3/v/I/F/6/V/light-blue-circle-md.png";
+                case 7:
+                    return "https://upload.wikimedia.org/wikipedia/commons/8/8e/Pan_Blue_Circle.png";
+                case 8:
+                    return "http://www.clipartkid.com/images/19/black-circle-clip-art-png-and-svg-GmosNX-clipart.png";
+                case 9:
+                    return "http://www.stickylife.com/images/u/7f632dbf5ba548c9bebc18162e9e4d4c-800.png";
+                case 10:
+                    return "http://www.clipartkid.com/images/405/orange-circle-clipart-orange-ball-image-vector-wZ3qUV-clipart.png";
+
+            }
+        }
+
+        //function setSize()
+    });
+</script>
+
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="logo-style logo-header"><img class="logo" src="/assets/logo.png"></a>
+    </div>
+  </nav>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="row">
+    <div class="col m12">
+      <div class="cardTopList">
+            <h1 class="center-align">My Music Preferences</h1>
+            <div class="graphMap"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col s12 m4">
+        <div class="cardVerticalList">
+          <h1 class="center-align">Top Music Genres</h1>
+          <p class="topList">
+            <ol>
+              <% for i in 1..10 do %>
+                  <li>Genre <%= i %></li><br>
+              <% end %>
+            </ol>
+          </p>
+        </div>
+      </div>
+    <div class="col s12 m4">
+      <div class="cardVerticalList">
+        <h1 class="center-align">Top Artist Types</h1>
+        <p class="topList">
+          <ol>
+            <% for i in 1..10 do %>
+                <li>Artist type <%= i %></li><br>
+            <% end %>
+          </ol>
+        </p>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="cardVerticalList">
+        <h1 class="center-align">Top Artist Origins</h1>
+        <p class="topList">
+          <ol>
+          <% for i in 1..10 do %>
+                <li>Origin <%= i %></li><br>
+          <% end %>
+          </ol>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
