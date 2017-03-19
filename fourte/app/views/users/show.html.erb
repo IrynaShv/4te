@@ -6,7 +6,7 @@
 
         var width = document.getElementById('mainContainer').offsetWidth;
         console.log(document.getElementById('mainContainer'));
-        var height = 500;
+        var height = 750;
 
         var svg = d3.select("div.graphMap").append("svg")
             .attr("width", width)
@@ -42,24 +42,8 @@
             .attr("x", (d) => getXOffset(d))
             .attr("y", (d) => getYOffset(d))
             .attr('fill',(d) => getColorFill(d))
-            .attr('stroke','black');
-        //.attr("xlink:href", function(d) {
-//
-//
-// node.append("image")
-//            .attr("x", (d) => getXOffset(d))
-//        .attr("y", (d) => getYOffset(d))
-//        .attr("width", (d) => getWidth(d))
-//        .attr("height", (d) => getHeight(d))
-//        //need to loop through nodes to find number of links for a node
-//        .attr("xlink:href", (d) => {
-//            if (d.type == "USER") {
-//            return d.image;
-//        } else if (d.class == "GENRE") {
-//            return color(2);
-//        }
-//    }
-//        );
+            .attr('stroke','black')
+
         function getColorFill(d) {
             switch (d.class) {
                 case "USER":
@@ -93,7 +77,7 @@
             if (d.class == "USER") {
                 return 75;
             } else if (d.type != "root") {
-                return d.occurences/2.0;
+                return d.occurences/3.0;
             }
             return 30;
         }
@@ -183,8 +167,8 @@
         <h1 class="center-align">Top Music Genres</h1>
         <p class="topList">
         <ol>
-          <% for i in 1..10 do %>
-              <li>Genre <%= i %></li><br>
+          <% @genres.each do |genre| %>
+              <li><%= genre[0]%></li><br>
           <% end %>
         </ol>
         </p>
