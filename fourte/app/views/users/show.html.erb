@@ -68,7 +68,18 @@
             if (d.class == "USER") {
                 return -75;
             } else if (d.type != "root") {
-                return -d.occurences/2;
+
+                var rootSize = d.occurences;
+
+                if (rootSize < 30.0) {
+                    rootSize = 30.0;
+                }
+
+                if (rootSize > 200.0) {
+                    rootSize = 200.0;
+                }
+
+                return -rootSize/3.0;
             }
             return -30;
         }
@@ -77,7 +88,17 @@
             if (d.class == "USER") {
                 return 75;
             } else if (d.type != "root") {
-                return d.occurences/3.0;
+                var rootSize = d.occurences;
+
+                if (rootSize < 30.0) {
+                    rootSize = 30.0;
+                }
+
+                if (rootSize > 200.0) {
+                    rootSize = 200.0;
+                }
+
+                return rootSize/3.0;
             }
             return 30;
         }

@@ -42,6 +42,8 @@ class UsersController < ApplicationController
                })
     count = count + 1
 
+    genresID = {};
+
     @genres.each do |genre|
       nodes.push({
           'id' =>count,
@@ -50,11 +52,29 @@ class UsersController < ApplicationController
           'name' => genre[0],
           'occurences' => genre[1]
                      })
-
+      genresID[genre[0]] = count
+      puts genresID[genre[0]]
       links.push({
           'source' => 0,
           'target' => count
                  })
+
+      count = count + 1
+    end
+
+    @user.artists.each do |artist|
+      nodes.push({
+          'id' => count,
+          'class' => "ARTIST",
+          'name' => artist.name
+                 });
+
+      artist.genres.each do |genre|
+        links.push({
+                       'source' => genresID[genre],
+                       'target' => count
+                   })
+      end
 
       count = count + 1
     end

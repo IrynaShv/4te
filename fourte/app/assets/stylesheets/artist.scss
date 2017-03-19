@@ -9,6 +9,7 @@ $dancing_script_font: 'Dancing Script',curvsive;
 
 .link {
   stroke: #ccc;
+  stroke-width: 1.5px;
 }
 
 .node text {
@@ -87,3 +88,19 @@ nav {
   background-color: transparent;
   margin-top: 30px;
 }
+
+.loginButton {
+  /* Rectangle 3: */
+  background: #61D484;
+  border: none;
+  border-radius: 100px;
+
+  /* See my music taste: */
+  font-family: Avenir-Medium;
+  font-size: 36px;
+  color: #000000;
+
+  padding: 20px;
+}
+
+
