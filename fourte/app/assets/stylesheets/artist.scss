@@ -3,7 +3,6 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import url('https://fonts.googleapis.com/css?family=Dancing+Script:400,700');
 
-
 $moss_green: #8E896C;
 $dancing_script_font: 'Dancing Script',curvsive;
 
@@ -29,6 +28,23 @@ html {
 
 image {
   border-radius: 50%;
+}
+
+.loading_page_text {
+  color: #ffffff;
+  font-family: Noteworthy-Bold;
+  font-size: 36px;
+  text-align: center;
+}
+
+.logo-img {
+  margin-top: 15% ;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.logo-loading-screen {
+  height: 200px;
 }
 
 .container {

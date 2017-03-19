@@ -32,6 +32,7 @@ class LoginController < ApplicationController
     end
 
     create_artists(items, user)
+    redirect_to :controller => :users, :action => :show , :id => user.id
   end
 
   def create_artists(items, user)
