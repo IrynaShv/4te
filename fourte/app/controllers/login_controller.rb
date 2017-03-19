@@ -6,7 +6,6 @@ class LoginController < ApplicationController
 
   def prepare
     @token = params[:access_token]
-    redirect_to 'http://4te.space/loading'
   end
 
   def loading
