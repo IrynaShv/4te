@@ -1,5 +1,29 @@
 <script>
     $(document).ready(function() {
+        var data = {
+            "nodes": [
+                {
+                    "name":"Betty White",
+                    "class":"USER",
+                    "type":"USER",
+                    "id":0
+                },
+                {
+                    "name":"Genre",
+                    "type":"root",
+                    "class":"GENRE",
+                    "id":1
+                }
+            ],
+            "links": [
+                {
+                    "source":0,
+                    "target":1
+                }
+            ]
+        };
+
+
         var width = document.getElementById('mainContainer').offsetWidth;
         console.log(document.getElementById('mainContainer'));
         var height = 500;
@@ -14,21 +38,21 @@
             .charge(-100)
             .size([width, height]);
 
-        d3.json("/assets/data.json", function (error, json) {
-            if (error) throw error;
+//        d3.json("/assets/data.json", function (error, json) {
+//            if (error) throw error;
 
             force
-                .nodes(json.nodes)
-                .links(json.links)
+                .nodes(data.nodes)
+                .links(data.links)
                 .start();
 
             var link = svg.selectAll(".link")
-                .data(json.links)
+                .data(data.links)
                 .enter().append("line")
                 .attr("class", "link");
 
             var node = svg.selectAll(".node")
-                .data(json.nodes)
+                .data(data.nodes)
                 .enter().append("g")
                 .attr("class", "node")
                 .call(force.drag);
@@ -54,18 +78,18 @@
                 if (d.class == "USER") {
                     return -75;
                 } else if (d.type != "root") {
-                    return d.occurences;
+                    return -d.occurences+20;
                 }
-                return -30;
+                return 0;
             }
 
             function getYOffset(d) {
                 if (d.class == "USER") {
                     return -75;
                 } else if (d.type != "root") {
-                    return d.occurences;
+                    return -d.occurences+20;
                 }
-                return -30;
+                return 0;
             }
 
             function getWidth(d) {
@@ -89,7 +113,7 @@
             node.append("text")
                 .attr("class","mapText")
                 .attr("dx", 12)
-                .attr("dy", ".35em")
+                .attr("dy", 0)
                 .text(function (d) {
                     return d.name
                 });
@@ -114,7 +138,7 @@
 
 
             });
-        });
+//        });
 
         function color(i) {
             switch (i) {
