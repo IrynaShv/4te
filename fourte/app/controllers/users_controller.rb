@@ -14,7 +14,9 @@ class UsersController < ApplicationController
 
     countries = {}
     artist_type = {'solo male' => 0, 'solo female' => 0, 'band' => 0}
-    @user.artists.each do |artist|
+    unless @user == nil || @user.artists == nil
+
+      @user.artists.each do |artist|
       if artist.genres != nil
         artist.genres.each do |genre|
           genres[genre] = genres[genre] + 1
@@ -32,27 +34,29 @@ class UsersController < ApplicationController
           countries[country] = 1
         end
       end
-    end
+      end
 
-    @genres = {}
-    @countries = {}
-    @artist_type = {}
 
-    genres.keys.sort_by { |key| genres[key] }.reverse.each do
-    |key|
-      puts genres[key]
-      @genres[key] = genres[key]
-    end
-    countries.keys.sort_by { |key| countries[key] }.reverse.each do
-    |key|
-      puts countries[key]
-      @countries[key] = countries[key]
-    end
+      @genres = {}
+      @countries = {}
+      @artist_type = {}
 
-    artist_type.keys.sort_by { |key| artist_type[key] }.reverse.each do
-    |key|
-      puts artist_type[key]
-     @artist_type[key] = artist_type[key]
+      genres.keys.sort_by { |key| genres[key] }.reverse.each do
+      |key|
+        puts genres[key]
+        @genres[key] = genres[key]
+      end
+      countries.keys.sort_by { |key| countries[key] }.reverse.each do
+      |key|
+        puts countries[key]
+        @countries[key] = countries[key]
+      end
+
+      artist_type.keys.sort_by { |key| artist_type[key] }.reverse.each do
+      |key|
+        puts artist_type[key]
+       @artist_type[key] = artist_type[key]
+      end
     end
   end
 
@@ -76,6 +80,7 @@ class UsersController < ApplicationController
     artistTypeID = {};
     countryTypeID = {};
 
+    unless @genres.nil?
     @genres.each do |genre|
       nodes.push({
           'id' =>count,
@@ -93,33 +98,38 @@ class UsersController < ApplicationController
       count = count + 1
     end
 
-    @artist_type.each do |artistType|
-      nodes.push({
-          'id' => count,
-          'class' => "ARTIST_TYPE",
-          'type' => artistType[0],
-          'name' => artistType[0],
-          'occurences' => artistType[1]
-                 })
-      artistTypeID[artistType[0]] = count
+    end
+    unless @artist_type.nil?
+      @artist_type.each do |artistType|
+        nodes.push({
+            'id' => count,
+            'class' => "ARTIST_TYPE",
+            'type' => artistType[0],
+            'name' => artistType[0],
+            'occurences' => artistType[1]
+                   })
+        artistTypeID[artistType[0]] = count
 
-      count = count + 1
+        count = count + 1
+      end
     end
 
+    unless @countries.nil?
     @countries.each do |country|
-      nodes.push({
-          'id' => count,
-          'class' => "COUNTRY",
-          'type' => country[0],
-          'name' => country[0],
-          'occurences' => country[1]
-                 })
+        nodes.push({
+            'id' => count,
+            'class' => "COUNTRY",
+            'type' => country[0],
+            'name' => country[0],
+            'occurences' => country[1]
+                   })
 
-      countryTypeID[country[0]] = count
+        countryTypeID[country[0]] = count
 
-      count = count + 1
+        count = count + 1
+      end
     end
-
+    unless @user.nil?
     @user.artists.each do |artist|
       nodes.push({
           'id' => count,
@@ -152,12 +162,15 @@ class UsersController < ApplicationController
                    })
       end
       count = count + 1
+      end
+
+
+      nodeJSON[:'nodes'] = nodes
+      nodeJSON[:'links'] = links
+
+      @fileJSON = JSON.generate(nodeJSON)
     end
 
-    nodeJSON[:'nodes'] = nodes
-    nodeJSON[:'links'] = links
-
-    @fileJSON = JSON.generate(nodeJSON)
   end
 
 end

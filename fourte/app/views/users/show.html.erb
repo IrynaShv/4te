@@ -195,8 +195,10 @@
         <p class="topList">
         <ol>
           <% for i in 1..10 %>
+            <% if @countries.keys[i] != nil %>
               <li><%= @genres.keys[i] + " - " + @genres[@genres.keys[i]].to_s%></li><br>
-          <% end %>
+            <% end %>
+        <% end %>
         </ol>
         </p>
       </div>
@@ -206,8 +208,11 @@
         <h1 class="center-align">Top Artist Types</h1>
         <p class="topList">
         <ol>
-          <% @artist_type.each do |at| %>
+          <% unless @artist_type.nil?%>
+            <% @artist_type.each do |at| %>
+
               <li><%= at[0] + " - " + at[1].to_s%></li><br>
+            <% end %>
           <% end %>
         </ol>
         </p>
@@ -219,7 +224,9 @@
         <p class="topList">
         <ol>
           <% for i in 1..10 %>
+            <% if @countries.keys[i] != nil %>
               <li><%= @countries.keys[i]+ " - " + @countries[@countries.keys[i]].to_s%> </li><br>
+            <% end %>
           <% end %>
         </ol>
         </p>
