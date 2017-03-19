@@ -1,0 +1,12 @@
+<h1><%@token%></h1>
+<p>HELLO</p>
+
+<p><%= request.url %></p>
+<p><%= request.fullpath%></p>
+
+
+<%= javascript_tag do %>
+    $(function() {
+    $.post('loading', {hash: document.location.hash});
+    });
+<% end %>

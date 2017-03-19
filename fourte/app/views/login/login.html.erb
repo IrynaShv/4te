@@ -1,0 +1,4 @@
+<%= link_to '<button type="button" >Login with Spotify</button>'.html_safe,
+            "https://accounts.spotify.com/authorize?client_id=7e53ecdd3c44410188efd3c80d0751a8&"+
+                "redirect_uri=http://localhost:3000/prepare&response_type=token&scope=user-library-read",
+            target: :_blank, :onclick => 'window.close()'%>
